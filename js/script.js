@@ -14,8 +14,22 @@ function showData(dataArray) {
   // El for itera sobre los elementos del array
   for (const item of dataArray) {
     // En la siguiente línea se utilizan "backticks" para armar el String. Más info => https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Template_literals
-    container.innerHTML += `<p> ${item.name} ${item.lastname} </p>`; // Se concatena cada párrafo de la manera que queremos mostrarlo al innerHTML del contenedor
+    container.innerHTML += `<p>${item.name} ${item.lastname}</p>`; // Se concatena cada párrafo de la manera que queremos mostrarlo al innerHTML del contenedor
   }
 }
 
 // Escribe el código necesario para realizar el fetch al archivo con los datos y mostrar los estudiantes con la función showData
+fetch(DATA_URL)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok'); // Lanza un error si la respuesta no es satisfactoria
+    }
+    return response.json(); // Convierte la respuesta a JSON
+  })
+  .then(data => {
+    const students = data.students; // Accede a la propiedad "students" del objeto JSON
+    showData(students); // Llama a la función showData con los datos obtenidos del JSON
+  })
+  .catch(error => {
+    console.error('There has been a problem with your fetch operation:', error); // Maneja posibles errores en la operación fetch
+  });
